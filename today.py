@@ -336,7 +336,7 @@ def formatter(query_type, difference, funct_return=False, whitespace=0):
 
 if __name__ == '__main__':
     """
-    King Dav (King12-D), 2025
+    King Dave, 2025
     """
     print('Calculation times:')
     user_data, user_time = perf_counter(user_getter, USER_NAME)
