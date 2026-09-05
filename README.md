@@ -1,6 +1,16 @@
-<a href="https://github.com/callmidavid/callmidavid">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/callmidavid/callmidavid/main/dark_mode.svg">
-    <img alt="King Dav's GitHub Profile README" src="https://raw.githubusercontent.com/callmidavid/callmidavid/main/light_mode.svg">
-  </picture>
-</a>
+<div align="justify">
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./output.gif">
+    <source media="(prefers-color-scheme: light)" srcset="./output.gif">
+    <img alt="GIFOS" src="output.gif">
+</picture>
+
+<sub><i>Generated automatically using [callmidavid/gitos](https://github.com/callmidavid/gitos) on Sat Sep 05 09:25:38 AM IST 2026</i></sub>
+
+<!-- <details>
+<summary>More details</summary>
+
+</details> -->
+</div>
+
+<!-- Image deletion URL: NONE -->
