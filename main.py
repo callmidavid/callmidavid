@@ -1,13 +1,18 @@
+# Using absolute paths based on this script's location so fonts are found
+import os
 from datetime import datetime
 
 import gifos
 from zoneinfo import ZoneInfo
 
-FONT_FILE_LOGO = "./fonts/vtks-blocketo.regular.ttf"
-# FONT_FILE_BITMAP = "./fonts/ter-u14n.pil"
-FONT_FILE_BITMAP = "./fonts/gohufont-uni-14.pil"
-FONT_FILE_TRUETYPE = "./fonts/IosevkaTermNerdFont-Bold.ttf"
-FONT_FILE_MONA = "./fonts/Inversionz.otf"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FONT_DIR = os.path.join(BASE_DIR, "fonts")
+
+FONT_FILE_LOGO = os.path.join(FONT_DIR, "vtks-blocketo.regular.ttf")
+# FONT_FILE_BITMAP = os.path.join(FONT_DIR, "ter-u14n.pil")
+FONT_FILE_BITMAP = os.path.join(FONT_DIR, "gohufont-uni-14.pil")
+FONT_FILE_TRUETYPE = os.path.join(FONT_DIR, "IosevkaTermNerdFont-Bold.ttf")
+FONT_FILE_MONA = os.path.join(FONT_DIR, "Inversionz.otf")
 
 
 def main():
