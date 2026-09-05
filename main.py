@@ -1,10 +1,10 @@
-# Using absolute paths based on this script's location so fonts are found
 import os
 from datetime import datetime
 
 import gifos
 from zoneinfo import ZoneInfo
 
+# Use absolute paths so fonts are found regardless of working directory
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FONT_DIR = os.path.join(BASE_DIR, "fonts")
 
@@ -16,7 +16,50 @@ FONT_FILE_MONA = os.path.join(FONT_DIR, "Inversionz.otf")
 
 
 def main():
-    t = gifos.Terminal(750, 500, 15, 15, FONT_FILE_BITMAP, 15)
+    # Select a usable font file. Prefer project bitmap `.pil`, then TTFs
+    # in the repo, then system truetype fonts. We require a minimum file
+    # size to avoid placeholder files being used.
+    def find_usable_font(candidates, min_size=2048):
+        for p in candidates:
+            try:
+                if p and os.path.isfile(p) and os.path.getsize(p) >= min_size:
+                    return p
+            except Exception:
+                continue
+        return None
+
+    candidates = [FONT_FILE_BITMAP, FONT_FILE_TRUETYPE, FONT_FILE_LOGO, FONT_FILE_MONA]
+    bitmap_font_to_use = find_usable_font(candidates)
+
+    # If none found in repo, try common system font locations
+    if not bitmap_font_to_use:
+        sys_font_paths = [
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf",
+            "/usr/share/fonts/truetype/freefont/FreeMono.ttf",
+        ]
+        bitmap_font_to_use = find_usable_font(sys_font_paths)
+
+    if not bitmap_font_to_use:
+        # Last resort: try any .ttf under /usr/share/fonts/truetype
+        try:
+            for root, dirs, files in os.walk("/usr/share/fonts/truetype"):
+                for f in files:
+                    if f.lower().endswith(".ttf"):
+                        fp = os.path.join(root, f)
+                        if os.path.getsize(fp) >= 2048:
+                            bitmap_font_to_use = fp
+                            break
+                if bitmap_font_to_use:
+                    break
+        except Exception:
+            bitmap_font_to_use = None
+
+    if not bitmap_font_to_use:
+        print("WARNING: No usable font found in project or system paths; gifos may fail to render correctly. Add real fonts to the `fonts/` folder.")
+        bitmap_font_to_use = FONT_FILE_BITMAP
+
+    t = gifos.Terminal(750, 500, 15, 15, bitmap_font_to_use, 15)
 
     t.gen_text("", 1, count=20)
     t.toggle_show_cursor(False)
@@ -45,7 +88,13 @@ def main():
     t.gen_text("Initiating Boot Sequence ", 1, contin=True)
     t.gen_typing_text(".....", 1, contin=True)
     t.gen_text("\x1b[96m", 1, count=0, contin=True)  # buffer to be removed
-    t.set_font(FONT_FILE_LOGO, 66)
+    # Only set the logo font if the file exists and looks usable; avoid
+    # calling into gifos with small/placeholder files which prints errors.
+    try:
+        if os.path.isfile(FONT_FILE_LOGO) and os.path.getsize(FONT_FILE_LOGO) >= 1024:
+            t.set_font(FONT_FILE_LOGO, 66)
+    except Exception:
+        pass
     # t.toggle_show_cursor(True)
     os_logo_text = "GIF OS"
     mid_row = (t.num_rows + 1) // 2
@@ -57,7 +106,13 @@ def main():
         t.delete_row(mid_row + 1)
         t.gen_text(effect_lines[i], mid_row + 1, mid_col + 1)
 
-    t.set_font(FONT_FILE_BITMAP, 15)
+    try:
+        t.set_font(bitmap_font_to_use, 15)
+    except Exception:
+        try:
+            t.set_font(FONT_FILE_BITMAP, 15)
+        except Exception:
+            pass
     t.clear_frame()
     t.clone_frame(5)
     t.toggle_show_cursor(False)
@@ -91,7 +146,7 @@ def main():
     user_details_lines = f"""
     \x1b[30;101mcallmidavid@GitHub\x1b[0m
     --------------
-    \x1b[96mOS:     \x1b[93mArch/Kafy OS, Arch, Android 14\x1b[0m
+    \x1b[96mOS:     \x1b[93mKafy OS, Arch, Android 14\x1b[0m
     \x1b[96mHost:   \x1b[93mKingsley Ozumba Mbadiwe University \x1b[94m#NSEC\x1b[0m
     \x1b[96mKernel: \x1b[93mComputer Science \x1b[94m#CSE\x1b[0m
     \x1b[96mUptime: \x1b[93m{user_age.years} years, {user_age.months} months, {user_age.days} days\x1b[0m
@@ -99,8 +154,8 @@ def main():
     
     \x1b[30;101mContact:\x1b[0m
     --------------
-    \x1b[96mEmail:      \x1b[93daviduchennamuna@gmail.com\x1b[0m
-    \x1b[96mLinkedIn:   \x1b[93king-dave\x1b[0m
+    \x1b[96mEmail:      \x1b[93mdaviduchennamuna@gmail.com\x1b[0m
+    \x1b[96mLinkedIn:   \x1b[93mking-dave\x1b[0m
     
     \x1b[30;101mGitHub Stats:\x1b[0m
     --------------
@@ -149,7 +204,13 @@ def main():
     """
     t.gen_text(monaLines, 10)
 
-    t.set_font(FONT_FILE_BITMAP)
+    try:
+        t.set_font(bitmap_font_to_use)
+    except Exception:
+        try:
+            t.set_font(FONT_FILE_BITMAP)
+        except Exception:
+            pass
     t.toggle_show_cursor(True)
     # t.pasteImage("./temp/callmidavid.jpg", 3, 5, sizeMulti=0.5)
     t.gen_text(user_details_lines, 2, 35, count=5, contin=True)
