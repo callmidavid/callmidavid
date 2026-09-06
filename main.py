@@ -64,8 +64,8 @@ def main():
     t.gen_text("", 1, count=20)
     t.toggle_show_cursor(False)
     year_now = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%Y")
-    t.gen_text("GIF_OS Modular BIOS v1.0.11", 1)
-    t.gen_text(f"Copyright (C) {year_now}, \x1b[31mDave Softwares Inc.\x1b[0m", 2)
+    t.gen_text("Kafy OS Modular BIOS v1.0.11", 1)
+    t.gen_text(f"Copyright (C) {year_now}, \x1b[31mCallmidavid Softwares Inc.\x1b[0m", 2)
     t.gen_text("\x1b[94mGitHub Profile ReadMe Terminal, Rev 1011\x1b[0m", 4)
     t.gen_text("Krypton(tm) GIFCPU - 250Hz", 6)
     t.gen_text(
@@ -88,15 +88,9 @@ def main():
     t.gen_text("Initiating Boot Sequence ", 1, contin=True)
     t.gen_typing_text(".....", 1, contin=True)
     t.gen_text("\x1b[96m", 1, count=0, contin=True)  # buffer to be removed
-    # Only set the logo font if the file exists and looks usable; avoid
-    # calling into gitos with small/placeholder files which prints errors.
-    try:
-        if os.path.isfile(FONT_FILE_LOGO) and os.path.getsize(FONT_FILE_LOGO) >= 1024:
-            t.set_font(FONT_FILE_LOGO, 66)
-    except Exception:
-        pass
+    t.set_font(FONT_FILE_LOGO, 66)
     # t.toggle_show_cursor(True)
-    os_logo_text = "GIF OS"
+    os_logo_text = "Kafy OS"
     mid_row = (t.num_rows + 1) // 2
     mid_col = (t.num_cols - len(os_logo_text) + 1) // 2
     effect_lines = gitos.effects.text_scramble_effect_lines(
@@ -106,17 +100,11 @@ def main():
         t.delete_row(mid_row + 1)
         t.gen_text(effect_lines[i], mid_row + 1, mid_col + 1)
 
-    try:
-        t.set_font(bitmap_font_to_use, 15)
-    except Exception:
-        try:
-            t.set_font(FONT_FILE_BITMAP, 15)
-        except Exception:
-            pass
+    t.set_font(FONT_FILE_BITMAP, 15)
     t.clear_frame()
     t.clone_frame(5)
     t.toggle_show_cursor(False)
-    t.gen_text("\x1b[93mGIF OS v1.0.11 (tty1)\x1b[0m", 1, count=5)
+    t.gen_text("\x1b[93mKafy OS v1.0.11 (tty1)\x1b[0m", 1, count=5)
     t.gen_text("login: ", 3, count=5)
     t.toggle_show_cursor(True)
     t.gen_typing_text("callmidavid", 3, contin=True)
@@ -176,7 +164,7 @@ def main():
     t.gen_text("\x1b[92mfetch.sh\x1b[0m", 1, contin=True)
     t.gen_typing_text(" -u callmidavid", 1, contin=True)
 
-    # Skip setting the MONA font in CI to avoid missing-file failures.
+    t.set_font(FONT_FILE_MONA, 16, 0)
     t.toggle_show_cursor(False)
     monaLines = r"""
     \x1b[49m     \x1b[90;100m}}\x1b[49m     \x1b[90;100m}}\x1b[0m
@@ -185,13 +173,13 @@ def main():
     \x1b[49m   \x1b[90;100m}}}}}}}}}}}}}\x1b[0m
     \x1b[49m   \x1b[90;100m}}}}}}}}}}}}}}\x1b[0m
     \x1b[49m   \x1b[90;100m}}\x1b[37;47m}}}}}}}\x1b[90;100m}}}}}\x1b[0m
-    \x1b[49m  \x1b[90;100m}}\x1b[37;47m}}}}}}}}}}\x1b[90;100m}}}\x1b[0m
+    \x1b[49m  \x1b[90;100m}}\x1b[37;47m}}}}}}}}}\x1b[90;100m}}}\x1b[0m
     \x1b[49m  \x1b[90;100m}}\x1b[37;47m}\x1b[90;100m}\x1b[37;47m}}}}}\x1b[90;100m}\x1b[37;47m}}\x1b[90;100m}}}}\x1b[0m
     \x1b[49m  \x1b[90;100m}\x1b[37;47m}}\x1b[90;100m}\x1b[37;47m}}}}}\x1b[90;100m}\x1b[37;47m}}}\x1b[90;100m}}}\x1b[0m
     \x1b[90;100m}}}\x1b[37;47m}}}}\x1b[90;100m}}}\x1b[37;47m}}}}}\x1b[90;100m}}}}\x1b[0m
     \x1b[49m  \x1b[90;100m}\x1b[37;47m}}}}}\x1b[90;100m}}\x1b[37;47m}}}}}\x1b[90;100m}}}\x1b[0m
-    \x1b[49m \x1b[90;100m}}\x1b[37;47m}}}}}}}}}}}}\x1b[90;100m}}}\x1b[0m
-    \x1b[90;100m}\x1b[49m  \x1b[90;100m}}\x1b[37;47m}}}}}}}}\x1b[90;100m}}}\x1b[49m  \x1b[90;100m}\x1b[0m
+    \x1b[49m \x1b[90;100m}}\x1b[37;47m}}}}}}}}}}}\x1b[90;100m}}}\x1b[0m
+    \x1b[90;100m}\x1b[49m  \x1b[90;100m}}\x1b[37;47m}}}}}}}\x1b[90;100m}}}\x1b[49m  \x1b[90;100m}\x1b[0m
     \x1b[49m        \x1b[90;100m}}}}}\x1b[0m
     \x1b[49m       \x1b[90;100m}}}}}}}\x1b[0m
     \x1b[49m       \x1b[90;100m}}}}}}}}\x1b[0m
@@ -204,13 +192,7 @@ def main():
     """
     t.gen_text(monaLines, 10)
 
-    try:
-        t.set_font(bitmap_font_to_use)
-    except Exception:
-        try:
-            t.set_font(FONT_FILE_BITMAP)
-        except Exception:
-            pass
+    t.set_font(FONT_FILE_BITMAP)
     t.toggle_show_cursor(True)
     # t.pasteImage("./temp/callmidavid.jpg", 3, 5, sizeMulti=0.5)
     t.gen_text(user_details_lines, 2, 35, count=5, contin=True)
