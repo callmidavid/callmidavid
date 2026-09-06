@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-import gifos
+import gitos
 from zoneinfo import ZoneInfo
 
 # Use absolute paths so fonts are found regardless of working directory
@@ -56,16 +56,16 @@ def main():
             bitmap_font_to_use = None
 
     if not bitmap_font_to_use:
-        print("WARNING: No usable font found in project or system paths; gifos may fail to render correctly. Add real fonts to the `fonts/` folder.")
+        print("WARNING: No usable font found in project or system paths; gitos may fail to render correctly. Add real fonts to the `fonts/` folder.")
         bitmap_font_to_use = FONT_FILE_BITMAP
 
-    t = gifos.Terminal(750, 500, 15, 15, bitmap_font_to_use, 15)
+    t = gitos.Terminal(750, 500, 15, 15, bitmap_font_to_use, 15)
 
     t.gen_text("", 1, count=20)
     t.toggle_show_cursor(False)
     year_now = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%Y")
     t.gen_text("GIF_OS Modular BIOS v1.0.11", 1)
-    t.gen_text(f"Copyright (C) {year_now}, \x1b[31mCallmidavid Softwares Inc.\x1b[0m", 2)
+    t.gen_text(f"Copyright (C) {year_now}, \x1b[31mDave Softwares Inc.\x1b[0m", 2)
     t.gen_text("\x1b[94mGitHub Profile ReadMe Terminal, Rev 1011\x1b[0m", 4)
     t.gen_text("Krypton(tm) GIFCPU - 250Hz", 6)
     t.gen_text(
@@ -89,7 +89,7 @@ def main():
     t.gen_typing_text(".....", 1, contin=True)
     t.gen_text("\x1b[96m", 1, count=0, contin=True)  # buffer to be removed
     # Only set the logo font if the file exists and looks usable; avoid
-    # calling into gifos with small/placeholder files which prints errors.
+    # calling into gitos with small/placeholder files which prints errors.
     try:
         if os.path.isfile(FONT_FILE_LOGO) and os.path.getsize(FONT_FILE_LOGO) >= 1024:
             t.set_font(FONT_FILE_LOGO, 66)
@@ -99,7 +99,7 @@ def main():
     os_logo_text = "GIF OS"
     mid_row = (t.num_rows + 1) // 2
     mid_col = (t.num_cols - len(os_logo_text) + 1) // 2
-    effect_lines = gifos.effects.text_scramble_effect_lines(
+    effect_lines = gitos.effects.text_scramble_effect_lines(
         os_logo_text, 3, include_special=False
     )
     for i in range(len(effect_lines)):
@@ -139,8 +139,8 @@ def main():
     t.gen_text("\x1b[92mclear\x1b[0m", 7, count=3, contin=True)
 
     ignore_repos = ["archiso-zfs", "archiso-zfs-archive"]
-    git_user_details = gifos.utils.fetch_github_stats("callmidavid", ignore_repos)
-    user_age = gifos.utils.calc_age(26, 7, 2002)
+    git_user_details = gitos.utils.fetch_github_stats("callmidavid", ignore_repos)
+    user_age = gitos.utils.calc_age(26, 7, 2002)
     t.clear_frame()
     top_languages = [lang[0] for lang in git_user_details.languages_sorted]
     user_details_lines = f"""
@@ -224,12 +224,12 @@ def main():
     t.gen_text("", t.curr_row, count=120, contin=True)
 
     t.gen_gif()
-    # image = gifos.utils.upload_imgbb("output.gif", 129600)  # 1.5 days expiration
+    # image = gitos.utils.upload_imgbb("output.gif", 129600)  # 1.5 days expiration
     readme_file_content = rf"""<div align="justify">
 <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./output.gif">
     <source media="(prefers-color-scheme: light)" srcset="./output.gif">
-    <img alt="GIFOS" src="output.gif">
+    <img alt="GITOS" src="output.gif">
 </picture>
 
 <sub><i>Generated automatically using [callmidavid/gitos](https://github.com/callmidavid/gitos) on {time_now}</i></sub>
